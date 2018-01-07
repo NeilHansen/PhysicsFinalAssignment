@@ -25,6 +25,11 @@ public class SkeletonController : MonoBehaviour {
 	public bool checkpoint2;
 	public bool checkpoint3;
 	private bool canJump;
+	public GameObject skeleton;
+	public Camera cannonCamera;
+	public GameObject cannonUI;
+	public GameObject checkpointUI;
+	public float timer=  3.0f;
 
 
 	// Use this for initialization
@@ -51,6 +56,7 @@ public class SkeletonController : MonoBehaviour {
 			checkpoint1 = true;
 			Checkpoint = col.gameObject;
 			Debug.Log ("here1");
+			StartCoroutine("CheckpointPopUp");
 		}
 
 		if (col.gameObject.tag == "Cp2") 
@@ -59,7 +65,22 @@ public class SkeletonController : MonoBehaviour {
 			checkpoint2 = true;
 			Checkpoint = col.gameObject;
 			Debug.Log ("here2");
+			timer = 3.0f;
+			StartCoroutine("CheckpointPopUp");
 			//this.GetComponent<MovingPlatform> ().enabled = false;
+		}
+
+
+	}
+
+	void OnTriggerStay(Collider col)
+	{
+		if (col.gameObject.tag == "Cannon") 
+		{
+			if (Input.GetKey (KeyCode.E))
+			{
+				EnterCannon ();
+			}
 		}
 	}
 	
@@ -71,6 +92,13 @@ public class SkeletonController : MonoBehaviour {
 		{
 			Restart ();
 		}
+
+		if (this.GetComponent<Cannon> ().Shot == true) 
+		{
+			ExitCannon ();
+		}
+
+		Anim.ResetTrigger ("Resurrection");
 	}
 
 	void Restart()
@@ -78,6 +106,8 @@ public class SkeletonController : MonoBehaviour {
 		if (checkpoint1 || checkpoint2 || checkpoint3)
 		{
 			this.transform.position = Checkpoint.gameObject.transform.position;
+			Anim.SetTrigger ("Resurrection");
+
 		}
 		else
 		{
@@ -154,5 +184,38 @@ public class SkeletonController : MonoBehaviour {
 		transform.localEulerAngles = new Vector3 (0.0f, yaw, 0.0f);
 		mainCamera.transform.localEulerAngles = new Vector3 (pitch, 0.0f, 0.0f);
 
+	}
+
+	IEnumerator CheckpointPopUp()
+	{
+		checkpointUI.SetActive (true);
+
+		yield return new WaitForSeconds(3.0f);
+	
+		checkpointUI.SetActive (false);
+	
+		yield return null;
+	}
+
+	void EnterCannon()
+	{
+		Debug.Log ("InCannon");
+		skeleton.SetActive (false);
+		cannonCamera.enabled = true;
+		this.GetComponentInChildren<Camera> ().enabled = false;
+		this.transform.position = new Vector3 (31.0f, 32.0f, -57.5f);
+		this.transform.rotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
+		this.GetComponent<Cannon> ().enabled = true;
+		cannonUI.SetActive (true);
+		this.GetComponent<SkeletonController> ().enabled = false;
+	}
+
+	void ExitCannon()
+	{
+		skeleton.SetActive (true);
+		cannonCamera.enabled = false;
+		this.GetComponentInChildren<Camera> ().enabled = true;
+		this.GetComponent<Cannon> ().enabled = false;
+		cannonUI.SetActive (false);
 	}
 }

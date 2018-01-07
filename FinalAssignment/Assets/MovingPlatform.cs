@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour {
 
+	public float speed;
 	public float position;
 	public GameObject platform;
 	// Use this for initialization
@@ -13,7 +14,7 @@ public class MovingPlatform : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float newposition = Mathf.PingPong (5 * Time.time, position);
+		float newposition = Mathf.PingPong (speed * Time.time, position);
 		this.transform.position = new Vector3 (newposition, transform.position.y,transform.position.z);
 	}
 }

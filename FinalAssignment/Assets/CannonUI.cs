@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class CannonUI : MonoBehaviour {
 
 	public bool displayUi;
-	public GameObject display;
+	public GameObject[] display;
+	public string text;
 
 
 	void OnMouseOver()
@@ -27,11 +28,18 @@ public class CannonUI : MonoBehaviour {
 	void Update () {
 		if (displayUi) 
 		{
-			display.SetActive (true);
+			for(int i = 0; i<display.Length; i++ )
+			{
+				display[i].SetActive (true);
+				display [i].GetComponentInChildren<Text> ().text = text;
+			}
 		} 
 		else
 		{
-			display.SetActive (false);
+			for(int i = 0; i<display.Length; i++ )
+			{
+				display[i].SetActive (false);
+			}
 		}
 	}
 }

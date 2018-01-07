@@ -14,7 +14,7 @@ public class Cannon : MonoBehaviour {
 	private float time;
 	private float displacementAngle;
 	private Vector3 direction;
-	public bool canSwing = true;
+	public bool Shot = true;
 	public GameObject cannon;
 	public GameObject movingPlatform;
 
@@ -30,32 +30,28 @@ public class Cannon : MonoBehaviour {
 		Vector3 targetDir =  wall.transform.position - cannon.transform.position;
 		float _angle = Vector3.Angle(targetDir, transform.forward);
 //		Debug.Log (_angle);
-		direction = Quaternion.Euler (-angle, 0.0f, 0.0f) * transform.forward;
+		direction = Quaternion.Euler (-angle,0.0f, 0.0f) * transform.forward;
 		direction.Normalize ();
-		if(Input.GetKeyDown(KeyCode.E))
+		if(Input.GetKeyDown(KeyCode.Space))
 		{
 			if(Mathf.Abs(rb.velocity.sqrMagnitude) < 0.0000001f)
 			{
 				if (speed <= 45.0f) {
 					rb.velocity = direction * speed;
-					canSwing = false;
+					Shot = true;
 				}
 				else if(speed >=45.0f)
 				{
 					//speed = 37.0f;
 					rb.velocity = direction * speed;
-					canSwing = false;
+					Shot = true;
 				}
 			}
 		}
-		if(rb.velocity.y < 0.001f)
-		{
-			
-		}
 
-		if (this.transform.position.z >= wall.transform.position.z) 
+		if (Shot) 
 		{
-	
+			this.GetComponent<SkeletonController> ().enabled = true;
 		}
 	}
 }
