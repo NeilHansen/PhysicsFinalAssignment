@@ -24,6 +24,7 @@ public class SkeletonController : MonoBehaviour {
 	public GameObject Checkpoint;
 	public bool checkpoint2;
 	public bool checkpoint3;
+	private bool canJump;
 
 
 	// Use this for initialization
@@ -38,6 +39,7 @@ public class SkeletonController : MonoBehaviour {
 			Anim.SetTrigger ("Grounded");
 			Anim.ResetTrigger ("Jump");
 			Anim.ResetTrigger ("InAir");
+			canJump = true;
 		}
 
 	}
@@ -135,10 +137,12 @@ public class SkeletonController : MonoBehaviour {
 		Anim.SetFloat ("Height", height);
 		if (Input.GetKeyDown (KeyCode.Space))
 		{
-
-			Anim.SetTrigger ("Jump");
-			Anim.SetTrigger ("InAir");
-			myBody.AddForce (this.transform.up * jumpForce, ForceMode.Impulse);
+			if (canJump) {
+				Anim.SetTrigger ("Jump");
+				Anim.SetTrigger ("InAir");
+				myBody.AddForce (this.transform.up * jumpForce, ForceMode.Impulse);
+				canJump = false;
+			}
 		}
 
 		//Camera and rotation
