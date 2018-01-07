@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SkeletonController : MonoBehaviour {
 
@@ -19,6 +20,12 @@ public class SkeletonController : MonoBehaviour {
 	private float yaw = 0.0f;
 	private float pitch = 0.0f;
 
+	public bool checkpoint1;
+	public GameObject Checkpoint;
+	public bool checkpoint2;
+	public bool checkpoint3;
+
+
 	// Use this for initialization
 	void Start () {
 		Anim = GetComponent<Animator> ();
@@ -26,11 +33,25 @@ public class SkeletonController : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
-		if (col.gameObject.tag == "Floor") 
+		if (col.gameObject.tag == "Floor" || col.gameObject.tag == "Falling tile" ) 
 		{
 			Anim.SetTrigger ("Grounded");
 			Anim.ResetTrigger ("Jump");
 			Anim.ResetTrigger ("InAir");
+		}
+		if (col.gameObject.tag == "Cp1") 
+		{
+			checkpoint1 = true;
+			Checkpoint = col.gameObject;
+		}
+
+		if (col.gameObject.tag == "Cp2") 
+		{
+			checkpoint1 = false;
+			checkpoint2 = true;
+			Checkpoint = col.gameObject;
+			Debug.Log ("here");
+			//this.GetComponent<MovingPlatform> ().enabled = false;
 		}
 	}
 	
@@ -50,9 +71,11 @@ public class SkeletonController : MonoBehaviour {
 		if (run)
 		{
 			Anim.SetTrigger ("Run");
+			speed = 120;
 		}
 		else 
 		{
+			speed = 100.0f;
 			//Anim.SetTrigger ("Walk");
 		}
 
@@ -84,7 +107,12 @@ public class SkeletonController : MonoBehaviour {
 			myBody.AddForce (-this.transform.right * speed, ForceMode.Force);
 			Anim.SetTrigger ("Walk");
 		}
+			
+		if (Input.GetKey(KeyCode.R)) 
+		{
 
+			Restart ();
+		}
 		height = myBody.velocity.y;
 		Anim.SetFloat ("Height", height);
 		if (Input.GetKeyDown (KeyCode.Space))
@@ -102,5 +130,15 @@ public class SkeletonController : MonoBehaviour {
 		transform.localEulerAngles = new Vector3 (0.0f, yaw, 0.0f);
 		mainCamera.transform.localEulerAngles = new Vector3 (pitch, 0.0f, 0.0f);
 	//	transform.eulerAngles = new Vector3 (pitch, yaw, 0.0f);
+	}
+
+	void Restart()
+	{
+		if (checkpoint1 || checkpoint2 || checkpoint3)
+		{
+			this.transform.position = Checkpoint.gameObject.transform.position;
+		}else{
+		SceneManager.LoadScene ("Game Scene");
+		}
 	}
 }
