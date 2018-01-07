@@ -29,7 +29,7 @@ public class Cannon : MonoBehaviour {
 	{
 		Vector3 targetDir =  wall.transform.position - cannon.transform.position;
 		float _angle = Vector3.Angle(targetDir, transform.forward);
-		Debug.Log (_angle);
+//		Debug.Log (_angle);
 		direction = Quaternion.Euler (-angle, 0.0f, 0.0f) * transform.forward;
 		direction.Normalize ();
 		if(Input.GetKeyDown(KeyCode.E))
