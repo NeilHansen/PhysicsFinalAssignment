@@ -98,7 +98,7 @@ public class SkeletonController : MonoBehaviour {
 			ExitCannon ();
 		}
 
-		Anim.ResetTrigger ("Resurrection");
+		//Anim.ResetTrigger ("Resurrection");
 	}
 
 	void Restart()
@@ -112,6 +112,7 @@ public class SkeletonController : MonoBehaviour {
 		else
 		{
 		SceneManager.LoadScene ("Game Scene");
+			Anim.SetTrigger ("Resurrection");
 		}
 	}
 
