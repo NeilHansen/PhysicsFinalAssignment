@@ -61,14 +61,24 @@ public class SkeletonController : MonoBehaviour {
 
 		if (col.gameObject.tag == "Cp2") 
 		{
+			checkpoint2 = false;
+			checkpoint3= true;
+			Checkpoint = col.gameObject;
+			Debug.Log ("here2");
+			StartCoroutine("CheckpointPopUp");
+			//this.GetComponent<MovingPlatform> ().enabled = false;
+		}
+
+		if (col.gameObject.tag == "Cp3") 
+		{
 			checkpoint1 = false;
 			checkpoint2 = true;
 			Checkpoint = col.gameObject;
 			Debug.Log ("here2");
-			timer = 3.0f;
 			StartCoroutine("CheckpointPopUp");
 			//this.GetComponent<MovingPlatform> ().enabled = false;
 		}
+
 
 
 	}
