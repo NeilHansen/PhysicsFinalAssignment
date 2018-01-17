@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Rewired;
 
 public class SkeletonController : MonoBehaviour {
 
@@ -31,9 +32,20 @@ public class SkeletonController : MonoBehaviour {
 	public GameObject checkpointUI;
 	public float timer=  3.0f;
 
+	public int playerID;
+	private Player player;
 
+	public GameObject pauseMenu;
+	private bool gamePaused;
+	public GameObject rewiredPrefab;
+
+	void Awake()
+	{
+		//GameObject rewired = (GameObject)Instantiate(rewiredPrefab,transform.position,transform.rotation);
+	}
 	// Use this for initialization
 	void Start () {
+		player = ReInput.players.GetPlayer(playerID);
 		Anim = GetComponent<Animator> ();
 		myBody = GetComponent<Rigidbody> ();
 	}
@@ -87,7 +99,7 @@ public class SkeletonController : MonoBehaviour {
 	{
 		if (col.gameObject.tag == "Cannon") 
 		{
-			if (Input.GetKey (KeyCode.E))
+			if (Input.GetKey (KeyCode.E)|| player.GetButton("Use"))
 			{
 				EnterCannon ();
 			}
@@ -98,7 +110,20 @@ public class SkeletonController : MonoBehaviour {
 	void Update () {
 		Movement ();
 
-		if (Input.GetKey(KeyCode.R)) 
+		if (player.GetButton ("Pause"))
+		{
+			if (gamePaused) 
+			{
+				Unpause ();
+				gamePaused = false;
+			}
+			else {
+				Pause ();
+				gamePaused = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.R)|| player.GetButton("Respawn")) 
 		{
 			Restart ();
 		}
@@ -131,28 +156,30 @@ public class SkeletonController : MonoBehaviour {
 		//Movement
 		float move = Input.GetAxis ("Vertical");
 		Anim.SetFloat ("Speed", move);
-		if (Input.GetKey(KeyCode.W)) 
+		if (Input.GetKey(KeyCode.W) || (player.GetAxis("Forward") > 0.0f)) 
 		{
 
 			myBody.AddForce (this.transform.forward * speed, ForceMode.Force);
 			Anim.SetTrigger ("Walk");
 		}
 
-		if (Input.GetKey(KeyCode.S)) 
+
+
+		if (Input.GetKey(KeyCode.S)|| (player.GetAxis("Forward") < 0.0f)) 
 		{
 
 			myBody.AddForce (-this.transform.forward * speed, ForceMode.Force);
 			Anim.SetTrigger ("Walk");
 		}
 
-		if (Input.GetKey(KeyCode.D)) 
+		if (Input.GetKey(KeyCode.D)|| (player.GetAxis("Right") > 0.0f)) 
 		{
 
 			myBody.AddForce (this.transform.right * speed, ForceMode.Force);
 			Anim.SetTrigger ("Walk");
 		}
 
-		if (Input.GetKey(KeyCode.A)) 
+		if (Input.GetKey(KeyCode.A)|| (player.GetAxis("Right") < 0.0f)) 
 		{
 
 			myBody.AddForce (-this.transform.right * speed, ForceMode.Force);
@@ -161,7 +188,7 @@ public class SkeletonController : MonoBehaviour {
 
 		//Run
 		bool run = Input.GetKey (KeyCode.LeftShift);
-		if (run)
+		if (run || player.GetButton("Run"))
 		{
 			Anim.SetTrigger ("Run");
 			speed = 120;
@@ -176,7 +203,7 @@ public class SkeletonController : MonoBehaviour {
 		//Jump
 		height = myBody.velocity.y;
 		Anim.SetFloat ("Height", height);
-		if (Input.GetKeyDown (KeyCode.Space))
+		if (Input.GetKeyDown (KeyCode.Space)|| player.GetButton("Jump"))
 		{
 			if (canJump) {
 				Anim.SetTrigger ("Jump");
@@ -190,8 +217,11 @@ public class SkeletonController : MonoBehaviour {
 		yaw += horizontalCameraSpeed * Input.GetAxis ("Mouse X");
 		pitch -= verticalCameraSpeed * Input.GetAxis ("Mouse Y");
 
+		yaw += horizontalCameraSpeed * player.GetAxis ("LookRight");
+		pitch -= verticalCameraSpeed * player.GetAxis ("LookUp");
+
 		pitch = Mathf.Clamp (pitch, FOVmin, FOVmax);
-		myBody.AddTorque (0, Input.GetAxis ("Mouse X") * horizontalCameraSpeed, 0);
+		myBody.AddTorque (0, yaw * horizontalCameraSpeed, 0);
 		transform.localEulerAngles = new Vector3 (0.0f, yaw, 0.0f);
 		mainCamera.transform.localEulerAngles = new Vector3 (pitch, 0.0f, 0.0f);
 
@@ -228,5 +258,28 @@ public class SkeletonController : MonoBehaviour {
 		this.GetComponentInChildren<Camera> ().enabled = true;
 		this.GetComponent<Cannon> ().enabled = false;
 		cannonUI.SetActive (false);
+	}
+
+	void Pause()
+	{
+		pauseMenu.SetActive (true);
+		Time.timeScale = 0.0f;
+	}
+
+	public void Unpause()
+	{
+		pauseMenu.SetActive (false);
+		Time.timeScale = 1.0f;
+	}
+
+	public void ReloadScene()
+	{
+		SceneManager.LoadScene ("HowToPlay");
+		Time.timeScale = 1.0f;
+	}
+
+	public void QuitToMenu()
+	{
+		SceneManager.LoadScene ("MainMenu");
 	}
 }

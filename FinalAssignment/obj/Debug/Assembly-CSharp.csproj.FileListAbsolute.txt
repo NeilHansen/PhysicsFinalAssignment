@@ -33,6 +33,7 @@ C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\obj\Debug\Ass
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\Assembly-CSharp.dll
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\Assembly-CSharp.pdb
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\nunit.framework.dll
+C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\Rewired_Core.dll
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\UnityEditor.dll
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\UnityEngine.Analytics.dll
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\UnityEngine.dll
@@ -59,5 +60,6 @@ C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debu
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\UnityEngine.Timeline.xml
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\UnityEngine.Analytics.xml
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\UnityEngine.HoloLens.xml
+C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\Temp\bin\Debug\Rewired_Core.xml
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\obj\Debug\Assembly-CSharp.dll
 C:\Users\neilm\Documents\SchoolRepo's\PhysicsFinal\FinalAssignment\obj\Debug\Assembly-CSharp.pdb

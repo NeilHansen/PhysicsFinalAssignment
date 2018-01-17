@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 public class Cannon : MonoBehaviour {
 
@@ -17,10 +18,11 @@ public class Cannon : MonoBehaviour {
 	public bool Shot = true;
 	public GameObject cannon;
 	public GameObject movingPlatform;
+	public Player player;
 
 	void Start () 
 	{
-		
+		player = ReInput.players.GetPlayer(0);
 		rb = GetComponent<Rigidbody> ();
 
 		//rb.velocity = direction * speed;
@@ -32,7 +34,7 @@ public class Cannon : MonoBehaviour {
 //		Debug.Log (_angle);
 		direction = Quaternion.Euler (-angle,0.0f, 0.0f) * transform.forward;
 		direction.Normalize ();
-		if(Input.GetKeyDown(KeyCode.Space))
+		if(Input.GetKeyDown(KeyCode.E)|| player.GetButton("Fire"))
 		{
 			if(Mathf.Abs(rb.velocity.sqrMagnitude) < 0.0000001f)
 			{
