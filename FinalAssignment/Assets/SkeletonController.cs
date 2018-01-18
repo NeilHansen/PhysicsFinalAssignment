@@ -59,6 +59,13 @@ public class SkeletonController : MonoBehaviour {
 			canJump = true;
 		}
 
+		if (col.gameObject.tag == "Bullet")
+		{
+			Damage ();
+			Debug.Log ("OUCH!");
+			Destroy (col.gameObject);
+		}
+
 	}
 
 	void OnTriggerEnter(Collider col)
@@ -281,5 +288,10 @@ public class SkeletonController : MonoBehaviour {
 	public void QuitToMenu()
 	{
 		SceneManager.LoadScene ("MainMenu");
+	}
+
+	void Damage()
+	{
+
 	}
 }

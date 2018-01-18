@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ShootingCannon : MonoBehaviour {
 
+	public GameObject bullet;
+	public GameObject bulletSpawn;
 	private Rigidbody mybody;
 
 	private float initialVelX;
@@ -12,6 +14,9 @@ public class ShootingCannon : MonoBehaviour {
 	private float Acceleration = -9.8f;
 	private float displacementx;
 	private float displacementz;
+
+	public float force;
+
 
 
 	private bool CanShoot;
@@ -26,30 +31,44 @@ public class ShootingCannon : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
-		if (col.gameObject.tag == "CannonRange") 
+		if (col.gameObject.tag == "Player") 
 		{
 			CanShoot = true;
+			InvokeRepeating("FireCannon",1.0f, 3.0f);
+			Debug.Log ("canshoot");
+		}
+	}
+
+
+
+	void OnTriggerExit(Collider col)
+	{
+		if (col.gameObject.tag == "Player") 
+		{
+			CanShoot = true;
+			Debug.Log ("cannotshoot");
+			CancelInvoke ("FireCannon");
 		}
 	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		if (CanShoot)
-		{
-			StartCoroutine ("FireCannon");
-		}
+		this.transform.LookAt (player.transform);
 	}
 
-	IEnumerator FireCannon()
+	void FireCannon()
 	{
-		yield return new WaitForSeconds (3.0f);
 		SetDisplacement (player);
-		CalclulateInitalVelX (finalVel, Acceleration, displacementx);
-		CalclulateInitalVelZ (finalVel, Acceleration, displacementz);
-		mybody.velocity = new Vector3 (initialVelX, 0, initialVelZ);
-		yield return null;
+		//CalclulateInitalVelX (finalVel, Acceleration, displacementx);
+		//CalclulateInitalVelZ (finalVel, Acceleration, displacementz);
+		GameObject bulletClone = Instantiate (bullet) as GameObject;
+		bulletClone.transform.position = bulletSpawn.transform.position;
+		bulletClone.GetComponent<Rigidbody> ().AddForce (this.transform.forward * force, ForceMode.Impulse);
+		//bulletClone.GetComponent<Rigidbody>().velocity = CalculateBallistics (bulletSpawn.transform.position, player.transform.position, 0); 
+		Debug.Log ("shot");
 	}
+
 
 	void SetDisplacement(GameObject player)
 	{
@@ -67,5 +86,22 @@ public class ShootingCannon : MonoBehaviour {
 	{
 		initialVelZ = Mathf.Sqrt (-2 * accel * dis);
 		Debug.Log (initialVelZ);
+	}
+
+	Vector3 CalculateBallistics(Vector3 startPoint, Vector3 endPoint, float dispY)
+	{
+		float dispX = Vector3.Distance (startPoint, endPoint);
+
+		float initVelY = Mathf.Sqrt(-2.0f * Physics.gravity.y * dispX);
+		//Debug.Log ("init vel y: " + initVelY);
+
+		float time = (0.0f - initVelY) / Physics.gravity.y;
+		//Debug.Log ("time: " + time);
+
+		float initVelX = dispX / time;
+		//Debug.Log ("init vel x: " + initVelX);
+
+		Vector3 newVelocity = new Vector3(-initVelX, initVelY, 0.0f);
+		return newVelocity;
 	}
 }
