@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Rewired;
+using UnityEngine.EventSystems;
 
 public class SkeletonController : MonoBehaviour {
 
@@ -38,9 +39,25 @@ public class SkeletonController : MonoBehaviour {
 	public GameObject pauseMenu;
 	private bool gamePaused;
 	public GameObject rewiredPrefab;
+	private int health = 3;
+	public GameObject heart;
+	public GameObject heart1;
+	public GameObject heart2;
+
+	public GameObject loosePanel;
+	public GameObject button;
+
+	public AudioSource source;
+	public AudioClip clip;
+	public AudioClip gameOverClip;
+	public AudioClip yay;
+	public AudioSource music;
+
+
 
 	void Awake()
 	{
+		Time.timeScale = 1.0f;
 		//GameObject rewired = (GameObject)Instantiate(rewiredPrefab,transform.position,transform.rotation);
 	}
 	// Use this for initialization
@@ -57,13 +74,15 @@ public class SkeletonController : MonoBehaviour {
 			Anim.ResetTrigger ("Jump");
 			Anim.ResetTrigger ("InAir");
 			canJump = true;
+
 		}
 
 		if (col.gameObject.tag == "Bullet")
 		{
-			Damage ();
+			Ouch ();
 			Debug.Log ("OUCH!");
 			Destroy (col.gameObject);
+			health--;
 		}
 
 	}
@@ -117,7 +136,32 @@ public class SkeletonController : MonoBehaviour {
 	void Update () {
 		Movement ();
 
-		if (player.GetButton ("Pause"))
+		switch (health) 
+		{
+		case 3:
+			heart.SetActive (true);
+			heart1.SetActive (true);
+			heart2.SetActive (true);
+			break;
+		case 2:
+			heart.SetActive (true);
+			heart1.SetActive (true);
+			heart2.SetActive (false);
+			break;
+		case 1:
+			heart.SetActive (true);
+			heart1.SetActive (false);
+			heart2.SetActive (false);
+			break;
+		case 0:
+			Death ();
+			heart.SetActive (false);
+			heart1.SetActive (false);
+			heart2.SetActive (false);
+			break;
+		}
+
+		if (player.GetButtonDown ("Pause"))
 		{
 			if (gamePaused) 
 			{
@@ -290,8 +334,27 @@ public class SkeletonController : MonoBehaviour {
 		SceneManager.LoadScene ("MainMenu");
 	}
 
-	void Damage()
+	void Death()
 	{
+		Debug.Log ("Dead");
+		Anim.SetTrigger ("Death");
 
+		music.Pause ();
+		Invoke ("StopGame", 1.6f);
+
+	}
+
+	void StopGame()
+	{
+		source.PlayOneShot (gameOverClip, 0.7f);
+		Debug.Log ("YOULOOSE");
+		Time.timeScale = 0.0f;
+		loosePanel.SetActive (true);
+		EventSystem.current.SetSelectedGameObject (button, null);
+	}
+
+	void Ouch()
+	{
+		source.PlayOneShot (clip, 0.7f);
 	}
 }

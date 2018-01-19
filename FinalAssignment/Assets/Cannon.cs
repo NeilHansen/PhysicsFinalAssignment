@@ -20,6 +20,9 @@ public class Cannon : MonoBehaviour {
 	public GameObject movingPlatform;
 	public Player player;
 
+	public AudioSource source;
+	public AudioClip clip;
+
 	void Start () 
 	{
 		player = ReInput.players.GetPlayer(0);
@@ -36,6 +39,7 @@ public class Cannon : MonoBehaviour {
 		direction.Normalize ();
 		if(Input.GetKeyDown(KeyCode.E)|| player.GetButton("Fire"))
 		{
+			source.PlayOneShot (clip, 0.7f);
 			if(Mathf.Abs(rb.velocity.sqrMagnitude) < 0.0000001f)
 			{
 				if (speed <= 45.0f) {

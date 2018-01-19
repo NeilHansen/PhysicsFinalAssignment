@@ -15,6 +15,10 @@ public class ShootingCannon : MonoBehaviour {
 	private float displacementx;
 	private float displacementz;
 
+
+	public AudioSource source;
+	public AudioClip clip;
+
 	public float force;
 
 
@@ -66,6 +70,7 @@ public class ShootingCannon : MonoBehaviour {
 		bulletClone.transform.position = bulletSpawn.transform.position;
 		bulletClone.GetComponent<Rigidbody> ().AddForce (this.transform.forward * force, ForceMode.Impulse);
 		//bulletClone.GetComponent<Rigidbody>().velocity = CalculateBallistics (bulletSpawn.transform.position, player.transform.position, 0); 
+		source.PlayOneShot (clip, 0.7f);
 		Debug.Log ("shot");
 	}
 
