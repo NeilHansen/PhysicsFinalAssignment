@@ -179,7 +179,7 @@ public class SkeletonController : MonoBehaviour {
 			Restart ();
 		}
 
-		if (this.GetComponent<Cannon> ().Shot == true) 
+		if (this.GetComponent<LaunchCannon> ().Shot == true) 
 		{
 			ExitCannon ();
 		}
@@ -297,7 +297,7 @@ public class SkeletonController : MonoBehaviour {
 		this.GetComponentInChildren<Camera> ().enabled = false;
 		this.transform.position = new Vector3 (31.0f, 32.0f, -57.5f);
 		this.transform.rotation = new Quaternion (0.0f, 0.0f, 0.0f, 0.0f);
-		this.GetComponent<Cannon> ().enabled = true;
+		this.GetComponent<LaunchCannon> ().enabled = true;
 		cannonUI.SetActive (true);
 		this.GetComponent<SkeletonController> ().enabled = false;
 	}
@@ -307,7 +307,7 @@ public class SkeletonController : MonoBehaviour {
 		skeleton.SetActive (true);
 		cannonCamera.enabled = false;
 		this.GetComponentInChildren<Camera> ().enabled = true;
-		this.GetComponent<Cannon> ().enabled = false;
+		this.GetComponent<LaunchCannon> ().enabled = false;
 		cannonUI.SetActive (false);
 	}
 
@@ -340,7 +340,7 @@ public class SkeletonController : MonoBehaviour {
 		Anim.SetTrigger ("Death");
 
 		music.Pause ();
-		Invoke ("StopGame", 1.6f);
+		Invoke ("StopGame", 1.0f);
 
 	}
 

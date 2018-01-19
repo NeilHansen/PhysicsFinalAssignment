@@ -71,6 +71,7 @@ public class ShootingCannon : MonoBehaviour {
 		bulletClone.GetComponent<Rigidbody> ().AddForce (this.transform.forward * force, ForceMode.Impulse);
 		//bulletClone.GetComponent<Rigidbody>().velocity = CalculateBallistics (bulletSpawn.transform.position, player.transform.position, 0); 
 		source.PlayOneShot (clip, 0.7f);
+		Destroy (bulletClone, 6.0f);
 		Debug.Log ("shot");
 	}
 
